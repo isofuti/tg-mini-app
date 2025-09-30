@@ -20,14 +20,41 @@ function App() {
     WebApp.ready();
     WebApp.expand();
 
-    // Set theme colors
-    WebApp.setHeaderColor('secondary_bg_color');
-    WebApp.setBackgroundColor('bg_color');
+    // Set theme colors (ignore version warnings)
+    try {
+      WebApp.setHeaderColor('secondary_bg_color');
+      WebApp.setBackgroundColor('bg_color');
+    } catch (e) {
+      // Ignore version warnings
+    }
 
     // Auto-login with Telegram data
     if (WebApp.initDataUnsafe?.user) {
       const initData = WebApp.initData;
       login(initData).catch(console.error);
+    } else {
+      // DEV MODE: Allow testing without Telegram
+      console.warn('⚠️ Running in DEV MODE without Telegram');
+      console.log('💡 To test in Telegram: deploy and open via @courceprat_bot');
+      
+      // Skip auth for development
+      if (import.meta.env.DEV) {
+        setTimeout(() => {
+          // Mock authentication for development
+          useAuthStore.setState({
+            isAuthenticated: true,
+            isLoading: false,
+            user: {
+              id: 'dev-user',
+              telegramId: 123456789,
+              username: 'devuser',
+              firstName: 'Dev',
+              lastName: 'User',
+              pointsBalance: 100,
+            }
+          });
+        }, 500);
+      }
     }
   }, [login]);
 
