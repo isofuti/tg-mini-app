@@ -11,6 +11,7 @@ import courseRoutes from './routes/course.routes';
 import lessonRoutes from './routes/lesson.routes';
 import pointsRoutes from './routes/points.routes';
 import adminRoutes from './routes/admin.routes';
+import catalogRoutes from './routes/catalog.routes';
 
 // Load environment variables
 dotenv.config();

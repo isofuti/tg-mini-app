@@ -248,4 +248,4 @@ ${context.lessonContent.substring(0, 500)}...
   }
 }
 
-export default new YandexGPTService();
+export default new LLMService();
