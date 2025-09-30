@@ -1,0 +1,28 @@
+{
+  "name": "telegram-courses-app",
+  "version": "1.0.0",
+  "description": "Telegram Mini App for AI-generated educational courses",
+  "private": true,
+  "workspaces": [
+    "backend",
+    "frontend",
+    "admin"
+  ],
+  "scripts": {
+    "dev": "bun run --filter backend dev & bun run --filter frontend dev",
+    "build": "bun run --filter backend build && bun run --filter frontend build",
+    "test": "bun test",
+    "lint": "eslint .",
+    "format": "prettier --write ."
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "eslint": "^8.55.0",
+    "prettier": "^3.1.0",
+    "typescript": "^5.3.3"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "bun": ">=1.0.0"
+  }
+}
