@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import WebApp from '@twa-dev/sdk';
 
@@ -13,9 +13,14 @@ import ProfilePage from './pages/ProfilePage';
 import { useAuthStore } from './store/authStore';
 
 function App() {
-  const { isAuthenticated, login } = useAuthStore();
+  const { isAuthenticated } = useAuthStore();
+  const [initialized, setInitialized] = useState(false);
 
   useEffect(() => {
+    // Run only once on mount
+    if (initialized) return;
+    setInitialized(true);
+
     // Initialize Telegram WebApp
     WebApp.ready();
     WebApp.expand();
@@ -25,13 +30,13 @@ function App() {
       WebApp.setHeaderColor('secondary_bg_color');
       WebApp.setBackgroundColor('bg_color');
     } catch (e) {
-      // Ignore version warnings
+      // Ignore version warnings in dev
     }
 
     // Auto-login with Telegram data
     if (WebApp.initDataUnsafe?.user) {
       const initData = WebApp.initData;
-      login(initData).catch(console.error);
+      useAuthStore.getState().login(initData).catch(console.error);
     } else {
       // DEV MODE: Allow testing without Telegram
       console.warn('⚠️ Running in DEV MODE without Telegram');
@@ -56,7 +61,7 @@ function App() {
         }, 500);
       }
     }
-  }, [login]);
+  }, [initialized]);
 
   if (!isAuthenticated) {
     return (
