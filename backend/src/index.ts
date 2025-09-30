@@ -78,9 +78,13 @@ async function startServer() {
     await connectDatabase();
     console.log('✅ Connected to PostgreSQL database');
 
-    // Connect to Redis
-    await connectRedis();
-    console.log('✅ Connected to Redis cache');
+    // Connect to Redis (optional - graceful degradation if unavailable)
+    try {
+      await connectRedis();
+      console.log('✅ Connected to Redis cache');
+    } catch (error) {
+      console.warn('⚠️  Redis unavailable - continuing without cache');
+    }
 
     // Start Express server
     app.listen(PORT, () => {
