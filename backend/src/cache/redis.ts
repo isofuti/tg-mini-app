@@ -30,31 +30,62 @@ export function getRedisClient(): RedisClientType {
 }
 
 export async function setCache(key: string, value: any, expireSeconds?: number): Promise<void> {
-  const client = getRedisClient();
-  const serialized = JSON.stringify(value);
-  if (expireSeconds) {
-    await client.setEx(key, expireSeconds, serialized);
-  } else {
-    await client.set(key, serialized);
+  if (!isRedisAvailable()) return;
+  
+  try {
+    const client = getRedisClient();
+    if (!client) return;
+    
+    const serialized = JSON.stringify(value);
+    if (expireSeconds) {
+      await client.setEx(key, expireSeconds, serialized);
+    } else {
+      await client.set(key, serialized);
+    }
+  } catch (error) {
+    console.error('Cache set error:', error);
   }
 }
 
 export async function getCache<T>(key: string): Promise<T | null> {
-  const client = getRedisClient();
-  const data = await client.get(key);
-  if (!data) return null;
-  return JSON.parse(data) as T;
+  if (!isRedisAvailable()) return null;
+  
+  try {
+    const client = getRedisClient();
+    if (!client) return null;
+    
+    const data = await client.get(key);
+    if (!data) return null;
+    return JSON.parse(data) as T;
+  } catch (error) {
+    console.error('Cache get error:', error);
+    return null;
+  }
 }
 
 export async function deleteCache(key: string): Promise<void> {
-  const client = getRedisClient();
-  await client.del(key);
+  if (!isRedisAvailable()) return;
+  
+  try {
+    const client = getRedisClient();
+    if (!client) return;
+    await client.del(key);
+  } catch (error) {
+    console.error('Cache delete error:', error);
+  }
 }
 
 export async function clearCache(pattern: string): Promise<void> {
-  const client = getRedisClient();
-  const keys = await client.keys(pattern);
-  if (keys.length > 0) {
-    await client.del(keys);
+  if (!isRedisAvailable()) return;
+  
+  try {
+    const client = getRedisClient();
+    if (!client) return;
+    const keys = await client.keys(pattern);
+    if (keys.length > 0) {
+      await client.del(keys);
+    }
+  } catch (error) {
+    console.error('Cache clear error:', error);
   }
 }
