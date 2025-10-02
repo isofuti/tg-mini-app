@@ -21,10 +21,10 @@ export default function HomePage() {
     <Layout>
       {/* Welcome Section */}
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">
+        <h1 className="text-2xl font-bold text-telegram-text mb-2">
           Привет, {user?.firstName || 'Друг'}! 👋
         </h1>
-        <p className="text-gray-600">
+        <p className="text-telegram-hint">
           Выбери курс или создай персонализированный под свои цели
         </p>
       </div>

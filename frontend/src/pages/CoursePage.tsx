@@ -38,7 +38,7 @@ export default function CoursePage() {
     <Layout title={currentCourse.title}>
       {/* Course Header */}
       <Card variant="elevated" className="mb-6">
-        {currentCourse.description && <p className="text-gray-600 mb-4">{currentCourse.description}</p>}
+        {currentCourse.description && <p className="text-telegram-hint mb-4">{currentCourse.description}</p>}
         <ProgressBar
           value={currentCourse.completedLessons || 0}
           max={currentCourse.totalLessons || 0}
@@ -51,13 +51,13 @@ export default function CoursePage() {
         {currentCourse.themes?.map((theme) => (
           <Card key={theme.id} variant="bordered">
             <div className="flex items-center justify-between mb-3">
-              <h3 className="font-semibold text-gray-900">
+              <h3 className="font-semibold text-telegram-text">
                 Тема {theme.themeNumber}: {theme.title}
               </h3>
             </div>
 
             {theme.description && (
-              <p className="text-sm text-gray-600 mb-3">{theme.description}</p>
+              <p className="text-sm text-telegram-hint mb-3">{theme.description}</p>
             )}
 
             <div className="space-y-2">
