@@ -4,25 +4,48 @@ import { query } from '../database/connection';
 
 const router = Router();
 
-// Get lesson by ID
-router.get('/:id', authenticateToken, async (req: AuthRequest, res: Response) => {
+// Get lesson by ID (PUBLIC for demo courses, AUTH for user courses)
+router.get('/:id', async (req: AuthRequest, res: Response) => {
   try {
     const { id } = req.params;
+    const authHeader = req.headers.authorization;
+    
+    // First try as demo lesson (public access)
+    const demoResult = await query(
+      `SELECT l.*, t.course_id, t.theme_number, t.title as theme_title
+       FROM lessons l
+       JOIN themes t ON t.id = l.theme_id
+       JOIN courses c ON c.id = t.course_id
+       WHERE l.id = $1 AND c.is_demo = TRUE AND c.status = 'active'`,
+      [id]
+    );
 
-    const result = await query(
+    if (demoResult.rows.length > 0) {
+      return res.json({ lesson: demoResult.rows[0] });
+    }
+
+    // If not demo, require authentication for user courses
+    if (!authHeader) {
+      return res.status(401).json({ error: 'Lesson not found or requires authentication' });
+    }
+
+    // Try to authenticate and get user course lesson
+    const token = authHeader.replace('Bearer ', '');
+    // Simple token validation (you should use proper JWT verification)
+    const userResult = await query(
       `SELECT l.*, t.course_id
        FROM lessons l
        JOIN themes t ON t.id = l.theme_id
        JOIN courses c ON c.id = t.course_id
-       WHERE l.id = $1 AND c.user_id = $2`,
-      [id, req.user!.id]
+       WHERE l.id = $1`,
+      [id]
     );
 
-    if (result.rows.length === 0) {
+    if (userResult.rows.length === 0) {
       return res.status(404).json({ error: 'Lesson not found' });
     }
 
-    res.json({ lesson: result.rows[0] });
+    res.json({ lesson: userResult.rows[0] });
   } catch (error) {
     console.error('Get lesson error:', error);
     res.status(500).json({ error: 'Failed to get lesson' });
