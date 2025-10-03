@@ -74,9 +74,15 @@ router.get('/:courseId', async (req: Request, res: Response) => {
       [courseId]
     );
 
+    // Group lessons by theme
+    const themesWithLessons = themesResult.rows.map(theme => ({
+      ...theme,
+      lessons: lessonsResult.rows.filter(lesson => lesson.theme_id === theme.id)
+    }));
+
     res.json({
       course: courseResult.rows[0],
-      themes: themesResult.rows,
+      themes: themesWithLessons,
       lessons: lessonsResult.rows
     });
   } catch (error) {

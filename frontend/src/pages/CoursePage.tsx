@@ -18,27 +18,25 @@ export default function CoursePage() {
   useEffect(() => {
     if (!id) return;
     
-    // Try to fetch as user course first
-    fetchCourse(id).catch(() => {
-      // If fails, try as demo course from catalog
-      api.getCatalog()
-        .then((data) => {
-          const demoCourse = data.courses?.find((c: any) => c.id === id);
-          if (demoCourse) {
-            // Fetch full demo course details
-            return fetch(`${(import.meta as any).env?.VITE_API_URL || 'http://localhost:3000'}/api/catalog/${id}`)
-              .then(res => res.json())
-              .then(fullData => {
-                setDemoCourseData(fullData);
-                setDemoLoading(false);
-              });
-          }
-        })
-        .catch((err) => {
-          console.error('Failed to fetch demo course:', err);
-          setDemoLoading(false);
+    // Try to fetch demo course first (from public catalog)
+    const apiUrl = (import.meta as any).env?.VITE_API_URL || 'http://localhost:3000';
+    
+    fetch(`${apiUrl}/api/catalog/${id}`)
+      .then(res => {
+        if (!res.ok) throw new Error('Not a demo course');
+        return res.json();
+      })
+      .then(fullData => {
+        setDemoCourseData(fullData);
+        setDemoLoading(false);
+      })
+      .catch(() => {
+        // If not a demo course, try as user course
+        setDemoLoading(false);
+        fetchCourse(id).catch((err) => {
+          console.error('Failed to fetch course:', err);
         });
-    });
+      });
   }, [id, fetchCourse]);
 
   // Use demo course data if available
@@ -86,7 +84,7 @@ export default function CoursePage() {
           <Card key={theme.id} variant="bordered">
             <div className="flex items-center justify-between mb-3">
               <h3 className="font-semibold text-telegram-text">
-                Тема {theme.themeNumber}: {theme.title}
+                Тема {theme.theme_number || theme.themeNumber}: {theme.title}
               </h3>
             </div>
 
