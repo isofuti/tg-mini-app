@@ -17,17 +17,16 @@ export function Layout({ children, showNav = true, title }: LayoutProps) {
 
   const navItems = [
     { icon: Home, label: 'Главная', path: '/' },
-    { icon: BookOpen, label: 'Курсы', path: '/courses' },
     { icon: User, label: 'Профиль', path: '/profile' },
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-20">
+    <div className="min-h-screen bg-telegram-bg pb-20">
       {/* Header */}
       {title && (
-        <header className="sticky top-0 z-10 bg-white border-b border-gray-200">
+        <header className="sticky top-0 z-10 bg-telegram-secondaryBg border-b border-gray-200/20">
           <div className="px-4 py-3">
-            <h1 className="text-xl font-bold text-gray-900">{title}</h1>
+            <h1 className="text-xl font-bold text-telegram-text">{title}</h1>
           </div>
         </header>
       )}
@@ -37,7 +36,7 @@ export function Layout({ children, showNav = true, title }: LayoutProps) {
 
       {/* Bottom Navigation */}
       {showNav && (
-        <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-20">
+        <nav className="fixed bottom-0 left-0 right-0 bg-telegram-secondaryBg border-t border-gray-200/20 z-20">
           <div className="flex justify-around items-center h-16">
             {navItems.map((item) => {
               const Icon = item.icon;
@@ -50,8 +49,8 @@ export function Layout({ children, showNav = true, title }: LayoutProps) {
                   className={clsx(
                     'flex flex-col items-center justify-center flex-1 h-full transition-colors',
                     {
-                      'text-primary-600': isActive,
-                      'text-gray-500 hover:text-gray-700': !isActive,
+                      'text-telegram-button': isActive,
+                      'text-telegram-hint hover:text-telegram-text': !isActive,
                     }
                   )}
                 >
