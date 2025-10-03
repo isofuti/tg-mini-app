@@ -12,6 +12,7 @@ import lessonRoutes from './routes/lesson.routes';
 import pointsRoutes from './routes/points.routes';
 import adminRoutes from './routes/admin.routes';
 import catalogRoutes from './routes/catalog.routes';
+import regenerationRoutes from './routes/regeneration.routes';
 
 // Load environment variables
 dotenv.config();
@@ -43,6 +44,7 @@ app.use('/api/lessons', lessonRoutes);
 app.use('/api/points', pointsRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/catalog', catalogRoutes);
+app.use('/api/regeneration', regenerationRoutes);
 
 // 404 handler
 app.use((req: Request, res: Response) => {

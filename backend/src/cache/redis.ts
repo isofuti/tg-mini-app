@@ -1,6 +1,11 @@
 import { createClient, RedisClientType } from 'redis';
 
 let redisClient: RedisClientType | null = null;
+let redisAvailable: boolean = false;
+
+function isRedisAvailable(): boolean {
+  return redisAvailable && redisClient !== null;
+}
 
 export async function connectRedis(): Promise<RedisClientType> {
   if (redisClient) {
@@ -16,7 +21,10 @@ export async function connectRedis(): Promise<RedisClientType> {
   });
 
   redisClient.on('error', (err) => console.error('Redis Client Error', err));
-  redisClient.on('connect', () => console.log('Redis Client Connected'));
+  redisClient.on('connect', () => {
+    console.log('Redis Client Connected');
+    redisAvailable = true;
+  });
 
   await redisClient.connect();
   return redisClient;

@@ -1,0 +1,12 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# Install dependencies
+RUN pip install --no-cache-dir httpx==0.27.0 psycopg2-binary==2.9.9
+
+# Copy script
+COPY generate_course_content.py .
+
+# Run script
+ENTRYPOINT ["python", "generate_course_content.py"]
