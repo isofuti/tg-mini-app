@@ -18,6 +18,9 @@ export default defineConfig({
       '.ngrok-free.dev',
       '.ngrok.io',
       '.ngrok.app',
+      'kursyapp.ru',
+      'www.kursyapp.ru',
+      'localhost',
     ],
   },
   build: {
