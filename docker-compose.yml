@@ -4,6 +4,7 @@ services:
   # PostgreSQL Database
   postgres:
     image: postgres:15-alpine
+    restart: unless-stopped
     container_name: telegram_courses_db
     environment:
       POSTGRES_DB: telegram_courses
@@ -11,9 +12,7 @@ services:
       POSTGRES_PASSWORD: postgres
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./backend/src/database/schema.sql:/docker-entrypoint-initdb.d/schema.sql
-    ports:
-      - "5432:5432"
+      - ./backend/src/database/schema.sql:/docker-entrypoint-initdb.d/schema.sql>
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
@@ -23,6 +22,7 @@ services:
   # Redis Cache
   redis:
     image: redis:7-alpine
+    restart: unless-stopped
     container_name: telegram_courses_redis
     ports:
       - "6379:6379"
@@ -38,6 +38,7 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     container_name: telegram_courses_backend
+    restart: unless-stopped
     environment:
       - NODE_ENV=production
       - PORT=3000
@@ -70,6 +71,7 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile.dev
+    restart: unless-stopped
     container_name: telegram_courses_frontend
     environment:
       - VITE_API_URL=${VITE_API_URL:-http://localhost:3000}
