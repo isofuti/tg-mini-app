@@ -15,9 +15,9 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
           'rounded-xl',
           {
             // Variants
-            'bg-white': variant === 'default',
-            'bg-white border border-gray-200': variant === 'bordered',
-            'bg-white shadow-md': variant === 'elevated',
+            'bg-telegram-secondaryBg': variant === 'default',
+            'bg-telegram-secondaryBg border border-gray-200/20': variant === 'bordered',
+            'bg-telegram-secondaryBg shadow-md': variant === 'elevated',
 
             // Padding
             'p-0': padding === 'none',

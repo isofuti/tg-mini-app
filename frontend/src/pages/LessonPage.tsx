@@ -50,7 +50,7 @@ export default function LessonPage() {
   if (!currentLesson) {
     return (
       <Layout showNav={false} title="Ошибка">
-        <Card><p className="text-center py-8 text-gray-500">Урок не найден</p></Card>
+        <Card><p className="text-center py-8 text-telegram-hint">Урок не найден</p></Card>
       </Layout>
     );
   }
@@ -58,11 +58,11 @@ export default function LessonPage() {
   return (
     <Layout showNav={false} title={currentLesson.title}>
       <Card variant="elevated" className="mb-6">
-        <div className="prose prose-sm max-w-none">
+        <div className="prose prose-sm max-w-none text-telegram-text">
           {currentLesson.content ? (
             <div dangerouslySetInnerHTML={{ __html: currentLesson.content.replace(/\n/g, '<br/>') }} />
           ) : (
-            <p className="text-gray-600">Контент урока генерируется...</p>
+            <p className="text-telegram-hint">Контент урока генерируется...</p>
           )}
         </div>
       </Card>

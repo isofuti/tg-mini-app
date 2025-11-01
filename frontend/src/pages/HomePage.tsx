@@ -21,10 +21,10 @@ export default function HomePage() {
     <Layout>
       {/* Welcome Section */}
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">
+        <h1 className="text-2xl font-bold text-telegram-text mb-2">
           Привет, {user?.firstName || 'Друг'}! 👋
         </h1>
-        <p className="text-gray-600">
+        <p className="text-telegram-hint">
           Выбери курс или создай персонализированный под свои цели
         </p>
       </div>
@@ -49,7 +49,7 @@ export default function HomePage() {
           <div className="text-center py-8">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600 mx-auto" />
           </div>
-        ) : courses.length === 0 ? (
+        ) : !courses || courses.length === 0 ? (
           <Card variant="bordered">
             <div className="text-center py-8">
               <p className="text-gray-500 mb-4">У вас пока нет курсов</p>
